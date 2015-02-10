@@ -10,7 +10,8 @@ import java.util.Scanner;
  */
 public class AgendaAsPrimitiveArray {
 
-    private Item[] agenda = new Item[500]; // our agenda has 500 items
+    private final static int MAX_AGENDA_ITEMS=4;
+    private Item[] agenda = new Item[MAX_AGENDA_ITEMS];
     private int currentAgendaIndex;
 
     public static void main(String[] args) {
@@ -29,14 +30,15 @@ public class AgendaAsPrimitiveArray {
                 case 2:
                     m.searchAgendaAndDisplay();
                     break;
-
                 case 3:
                     m.createItem();
                     break;
                 case 4:
                     m.updateItem();
                     break;
-                //  case "delete": deleteItem();
+                case 5:
+                    m.deleteItem();
+                    break;
                 case 9:
                     m.exitOption();
                     break;
@@ -49,15 +51,36 @@ public class AgendaAsPrimitiveArray {
     }
 
     private void createItem() {
+        boolean wasInserted = false;
         HandleKeyboard handleKeyboard = new HandleKeyboard().invokeItem();
         String name = handleKeyboard.getName();
         String phone = handleKeyboard.getPhone();
 
-        Item i = new Item();
-        i.setName(name);
-        i.setPhoneNumber(phone);
-        agenda[currentAgendaIndex] = i;
-        currentAgendaIndex++;
+        Item item = new Item();
+        item.setName(name);
+        item.setPhoneNumber(phone);
+
+        if(currentAgendaIndex<MAX_AGENDA_ITEMS) {
+            agenda[currentAgendaIndex] = item;
+            currentAgendaIndex++;
+             wasInserted = true;
+        }
+        else {
+            //try to find null slots and add th item in the first null slot
+            System.out.println("debug: try to find slots");
+            for (int i = 0; i < agenda.length; i++) {
+                if (agenda[i] == null) { // found one
+                    agenda[i]=item;
+                    wasInserted=true;
+                    System.out.println("debug: slot found, inserted ok");
+                    break;
+                }
+            }
+        }
+        if(wasInserted)
+            System.out.println("Item was added");
+        else
+            System.out.println("Memory full! The item cannot be added");
     }
 
 
@@ -79,6 +102,20 @@ public class AgendaAsPrimitiveArray {
         }
 
     }
+
+
+    private void deleteItem() {
+        //search and if found delete it and null the position
+        int indexItem = searchAgenda();
+        if (indexItem != -1) { //found
+            agenda[indexItem] = null;
+            System.out.println("Item was deleted!");
+        } else {
+            System.out.println("Item not found, so you cannot delete it!");
+        }
+
+    }
+
 
     /* returns the index where the name was found or -1 if the name is not in the agenda*/
     private int searchAgenda() {
@@ -118,17 +155,19 @@ public class AgendaAsPrimitiveArray {
     private void listAgenda() {
 
         int emptySpaces = 0;
-        System.out.println("agenda.length = " + agenda.length); //sout tab, or soutv tab, or soutm tab
+        //System.out.println("agenda.length = " + agenda.length); //sout tab, or soutv tab, or soutm tab
+        System.out.println("Your Agenda:");
         for (Item anAgenda : agenda) {
             if (anAgenda != null) {
                 String name = anAgenda.getName();
                 String telephone = anAgenda.getPhoneNumber();
-                System.out.println(name + " " + telephone);
+                System.out.println("Name: "+name + " ;Phone: " + telephone);
             } else {
                 emptySpaces++;
             }
         }
-        System.out.println("empty spaces:" + emptySpaces);
+       // System.out.println("empty spaces:" + emptySpaces);
+        System.out.println("---------------");
     }
 
 
@@ -137,6 +176,7 @@ public class AgendaAsPrimitiveArray {
         System.out.println("2. Search");
         System.out.println("3. Create");
         System.out.println("4. Update");
+        System.out.println("5. Delete");
         System.out.println("9. Exit");
     }
 
