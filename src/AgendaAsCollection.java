@@ -10,7 +10,7 @@ import java.util.Scanner;
 /**
  * Created by condor on 10/02/15.
  * FastTrackIT, 2015
- *
+ * <p/>
  * DEMO ONLY PURPOSES, IT MIGHT CONTAINS INTENTIONALLY ERRORS OR ESPECIALLY BAD PRACTICES
  */
 public class AgendaAsCollection {
@@ -115,12 +115,12 @@ public class AgendaAsCollection {
 
         // for (Item anAgenda : agenda) might not work here , we need the index so I keep the original form of for
         for (int i = 0; i < agenda.size(); i++) {
-                Item item = agenda.get(i);
-                String nameInAgenda = item.getName();
-                if (name.equalsIgnoreCase(nameInAgenda)) {
-                    indexWhereItWasFound = i;
-                    break;
-                }
+            Item item = agenda.get(i);
+            String nameInAgenda = item.getName();
+            if (name.equalsIgnoreCase(nameInAgenda)) {
+                indexWhereItWasFound = i;
+                break;
+            }
 
         }
         return indexWhereItWasFound;
@@ -145,11 +145,11 @@ public class AgendaAsCollection {
 
         System.out.println("Your Agenda:");
         for (Item anAgenda : agenda) {
-                String name = anAgenda.getName();
-                String telephone = anAgenda.getPhoneNumber();
-                System.out.println("Name: "+name + " ;Phone: " + telephone);
+            String name = anAgenda.getName();
+            String telephone = anAgenda.getPhoneNumber();
+            System.out.println("Name: " + name + " ;Phone: " + telephone);
         }
-       // System.out.println("empty spaces:" + emptySpaces);
+        // System.out.println("empty spaces:" + emptySpaces);
         System.out.println("---------------");
     }
 
@@ -186,7 +186,7 @@ public class AgendaAsCollection {
         //warning, it is going to overwrite
         HandleKeyboard handleKeyboard = new HandleKeyboard().invokeYesNo();
         String yesNo = handleKeyboard.getYesNo();
-        if(yesNo.equalsIgnoreCase("Y")) {
+        if (yesNo.equalsIgnoreCase("Y")) {
             FileInputStream fis = null;
             ByteArrayOutputStream out = null;
             try {
@@ -212,23 +212,19 @@ public class AgendaAsCollection {
 
         FileOutputStream fwr = null;
         try {
-            byte[] data = SerializationUtils.serialize((ArrayList)agenda);
+            byte[] data = SerializationUtils.serialize((ArrayList) agenda);
             File f = new File("agendalist.txt");
             fwr = new FileOutputStream(f);
             fwr.write(data);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(fwr);
         }
         System.out.println("Write to file done!");
 
 
     }
-
-
-
 
 
     private class HandleKeyboard {
