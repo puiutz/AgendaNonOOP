@@ -1,5 +1,8 @@
+import java.io.*;
 import java.util.Scanner;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SerializationUtils;
 
 
 /**
@@ -22,8 +25,6 @@ public class AgendaAsPrimitiveArray {
             m.printMenu();
             int option = m.readMenuOption();
             switch (option) {
-                //   case "loadFile": loadFile();
-                //   case "saveFile": saveFile();
                 case 1:
                     m.listAgenda();
                     break;
@@ -38,6 +39,12 @@ public class AgendaAsPrimitiveArray {
                     break;
                 case 5:
                     m.deleteItem();
+                    break;
+                case 6:
+                    m.readFromFile();
+                    break;
+                case 7:
+                    m.writeToFile();
                     break;
                 case 9:
                     m.exitOption();
@@ -177,6 +184,9 @@ public class AgendaAsPrimitiveArray {
         System.out.println("3. Create");
         System.out.println("4. Update");
         System.out.println("5. Delete");
+        System.out.println("6. Read From File");
+        System.out.println("7. Write to File");
+
         System.out.println("9. Exit");
     }
 
@@ -194,11 +204,65 @@ public class AgendaAsPrimitiveArray {
         return handleKeyboard.getOption();
     }
 
+
+    private void readFromFile() {
+
+        //warning, it is going to overwrite
+        HandleKeyboard handleKeyboard = new HandleKeyboard().invokeYesNo();
+        String yesNo = handleKeyboard.getYesNo();
+        if(yesNo.equalsIgnoreCase("Y")) {
+            FileInputStream fis = null;
+            ByteArrayOutputStream out = null;
+            try {
+                File f = new File("agenda.txt");
+                fis = new FileInputStream(f);
+                out = new ByteArrayOutputStream();
+                IOUtils.copy(fis, out);
+                byte[] data = out.toByteArray();
+                agenda = SerializationUtils.deserialize(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                IOUtils.closeQuietly(out);
+                IOUtils.closeQuietly(fis);
+            }
+            System.out.println("Read from file done!");
+        }
+
+    }
+
+
+    private void writeToFile() {
+
+        FileOutputStream fwr = null;
+        try {
+            byte[] data = SerializationUtils.serialize(agenda);
+            File f = new File("agenda.txt");
+            fwr = new FileOutputStream(f);
+            fwr.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            IOUtils.closeQuietly(fwr);
+        }
+        System.out.println("Write to file done!");
+
+
+    }
+
+
+
+
+
     private class HandleKeyboard {
         private String name;
         private String phone;
 
         private int option;
+
+        private String yesNo;
+
 
         public String getName() {
             return name;
@@ -210,6 +274,10 @@ public class AgendaAsPrimitiveArray {
 
         public int getOption() {
             return option;
+        }
+
+        public String getYesNo() {
+            return yesNo;
         }
 
         public HandleKeyboard invokeItem() {
@@ -232,6 +300,13 @@ public class AgendaAsPrimitiveArray {
             Scanner s = new Scanner(System.in);
             System.out.print("Option: ");
             option = s.nextInt();
+            return this;
+        }
+
+        public HandleKeyboard invokeYesNo() {
+            Scanner s = new Scanner(System.in);
+            System.out.print("Are you sure you want to overwrite your current content in memory ? (Y,N): ");
+            yesNo = s.nextLine();
             return this;
         }
     }

@@ -1,8 +1,10 @@
+import java.io.Serializable;
+
 /**
  * Created by condor on 10/02/15.
  * FastTrackIT, 2015
  */
-class Item {
+class Item implements Serializable{
     private String name;
     private String phoneNumber;
 
