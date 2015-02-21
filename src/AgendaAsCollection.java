@@ -19,9 +19,10 @@ public class AgendaAsCollection {
     private List<Item> agenda = new ArrayList<Item>();
 
     public static void main(String[] args) {
+
         System.out.println("AgendaTa versiunea 2.0");
         AgendaAsCollection m = new AgendaAsCollection();
-
+     m.readFromFile();
         do {
             m.printMenu();
             int option = m.readMenuOption();
@@ -50,6 +51,9 @@ public class AgendaAsCollection {
                 case 9:
                     m.exitOption();
                     break;
+                case 10:
+                    m.sortare();
+                    break;
                 default:
                     m.defaultOption();
                     break;
@@ -69,6 +73,9 @@ public class AgendaAsCollection {
 
         agenda.add(item);
         System.out.println("Added.");
+
+
+        writeToFile();
     }
 
 
@@ -88,6 +95,8 @@ public class AgendaAsCollection {
             System.out.println("Item was updated!");
         } else {
             System.out.println("You cannot update an item that does not exists in agenda!");
+
+                 writeToFile();
         }
 
     }
@@ -101,10 +110,16 @@ public class AgendaAsCollection {
             System.out.println("Item was deleted!");
         } else {
             System.out.println("Item not found, so you cannot delete it!");
+
+
+            writeToFile();
         }
 
     }
 
+    private void sortare(){
+
+    }
 
     /* returns the index where the name was found or -1 if the name is not in the agenda*/
     private int searchAgenda() {
@@ -162,8 +177,8 @@ public class AgendaAsCollection {
         System.out.println("5. Delete");
         System.out.println("6. Read From File");
         System.out.println("7. Write to File");
-
         System.out.println("9. Exit");
+        System.out.println("10. Sortare");
     }
 
     private void exitOption() {
@@ -230,6 +245,7 @@ public class AgendaAsCollection {
     private class HandleKeyboard {
         private String name;
         private String phone;
+        private String firstname;
 
         private int option;
 
@@ -258,7 +274,10 @@ public class AgendaAsCollection {
             name = s.nextLine();
             System.out.print("Phone Number: ");
             phone = s.nextLine();
+            System.out.println("Firstname: ");
+            firstname =s.nextLine();
             return this;
+
         }
 
         public HandleKeyboard invokeItemName() {

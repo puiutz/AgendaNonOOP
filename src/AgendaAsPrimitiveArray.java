@@ -49,6 +49,9 @@ public class AgendaAsPrimitiveArray {
                 case 9:
                     m.exitOption();
                     break;
+                case 10:
+                    m.sortare();
+                    break;
                 default:
                     m.defaultOption();
                     break;
@@ -62,10 +65,12 @@ public class AgendaAsPrimitiveArray {
         HandleKeyboard handleKeyboard = new HandleKeyboard().invokeItem();
         String name = handleKeyboard.getName();
         String phone = handleKeyboard.getPhone();
+        String Firstname=handleKeyboard.getFirstname();
 
         Item item = new Item();
         item.setName(name);
         item.setPhoneNumber(phone);
+        item.setFirstname(Firstname);
 
         if(currentAgendaIndex<MAX_AGENDA_ITEMS) {
             agenda[currentAgendaIndex] = item;
@@ -80,7 +85,9 @@ public class AgendaAsPrimitiveArray {
                     agenda[i]=item;
                     wasInserted=true;
                     System.out.println("debug: slot found, inserted ok");
+
                     break;
+
                 }
             }
         }
@@ -88,8 +95,14 @@ public class AgendaAsPrimitiveArray {
             System.out.println("Item was added");
         else
             System.out.println("Memory full! The item cannot be added");
+
+
+        writeToFile();
     }
 
+    private void sortare(){
+        System.out.println("Afiseaza in ordine alfabetica dupa nume");
+    }
 
     private void updateItem() {
         //search and if found do an update
@@ -106,6 +119,9 @@ public class AgendaAsPrimitiveArray {
             System.out.println("Item was updated!");
         } else {
             System.out.println("You cannot update an item that does not exists in agenda!");
+
+
+            writeToFile();
         }
 
     }
@@ -119,6 +135,9 @@ public class AgendaAsPrimitiveArray {
             System.out.println("Item was deleted!");
         } else {
             System.out.println("Item not found, so you cannot delete it!");
+
+
+            writeToFile();
         }
 
     }
@@ -188,6 +207,7 @@ public class AgendaAsPrimitiveArray {
         System.out.println("7. Write to File");
 
         System.out.println("9. Exit");
+        System.out.println("10. Sortare");
     }
 
     private void exitOption() {
@@ -258,12 +278,13 @@ public class AgendaAsPrimitiveArray {
     private class HandleKeyboard {
         private String name;
         private String phone;
+        private String firstname;
 
         private int option;
 
         private String yesNo;
 
-
+    public String getFirstname(){return firstname  ;}
         public String getName() {
             return name;
         }
@@ -286,7 +307,12 @@ public class AgendaAsPrimitiveArray {
             name = s.nextLine();
             System.out.print("Phone Number: ");
             phone = s.nextLine();
+            System.out.print("Firstname: ");
+            firstname = s.nextLine();
             return this;
+
+
+
         }
 
         public HandleKeyboard invokeItemName() {

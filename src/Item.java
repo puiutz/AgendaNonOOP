@@ -8,6 +8,15 @@ class Item implements Serializable{
     private String name;
     private String phoneNumber;
 
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    private String firstname;
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -23,4 +32,8 @@ class Item implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-}
+
+
+    }
+
+
